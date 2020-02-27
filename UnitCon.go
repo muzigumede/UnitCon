@@ -9,15 +9,19 @@ import ("fmt"
         //"reflect"
         )
 
+//bug to fix: variable toUnit in func convertCM() contains multiline blank space
+
 func main(){
     reader := bufio.NewReader(os.Stdin)
     fmt.Println("Enter conversion: e.g 35cm to mm")
     userInput,_ := reader.ReadString('\n')
 
     inputValue, inputUnit, outputUnit := separate(userInput)
-    fmt.Println(inputValue)
-    fmt.Println(inputUnit)
-    fmt.Println(outputUnit)
+    if inputUnit == "cm" {
+        outputValue := convertCM(inputValue, outputUnit)
+        fmt.Println(outputValue)
+    }
+    
 }
 
 type conversion struct {
@@ -57,15 +61,11 @@ func separate(userInput string)(float64, string, string){
     return conversion1
 }*/
 
-func cmConvert(cm string, toUnit string) float64{
+func convertCM(cm float64, toUnit string) float64{
     var newUnit float64 = 0.0
 
-    if toUnit == "mm" {
-        mm, err := strconv.ParseFloat(cm, 64)
-        if err != nil {
-            panic(err)
-        }
-        mm = mm*10
+    if strings.Contains(toUnit, "mm") {
+        mm := cm*10
         newUnit = mm
     }
     return newUnit
