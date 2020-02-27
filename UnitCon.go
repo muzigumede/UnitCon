@@ -14,8 +14,10 @@ func main(){
     fmt.Println("Enter conversion: e.g 35cm to mm")
     userInput,_ := reader.ReadString('\n')
 
-    arrFormatedInput := separate(userInput)
-    fmt.Println(arrFormatedInput)
+    inputValue, inputUnit, outputUnit := separate(userInput)
+    fmt.Println(inputValue)
+    fmt.Println(inputUnit)
+    fmt.Println(outputUnit)
 }
 
 type conversion struct {
@@ -24,19 +26,23 @@ type conversion struct {
     toUnit string
 }
 
-func separate(userInput string) [3]string{
+func separate(userInput string)(float64, string, string){
     var midIndex = strings.Index(userInput, "to")
     
     var inputUnit string = strings.Replace(userInput[0:midIndex]," ","",-1)
     var outputUnit string = strings.Replace(userInput[midIndex+2:len(userInput)]," ","",-1)
     re := regexp.MustCompile("[0-9]+")
     inputValueArray := re.FindAllString(inputUnit,-1)
-    inputValue := inputValueArray[0]
-
+    inputValue :=inputValueArray[0]
+    
     inputUnit = strings.Replace(inputUnit,inputValue,"",-1)
+    
+    floatInputValue, err := strconv.ParseFloat(inputValue, 64)
+    if err != nil{
+        panic(err)
+    }
 
-    arr := [3]string{inputValue, inputUnit, outputUnit}
-    return arr
+    return floatInputValue, inputUnit, outputUnit
 }
 
 //convert user input string into an fixed array with [1]=number, [2]=unit, [3]=to unit
