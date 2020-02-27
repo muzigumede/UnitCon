@@ -17,11 +17,12 @@ func main(){
     userInput,_ := reader.ReadString('\n')
 
     inputValue, inputUnit, outputUnit := separate(userInput)
+
+    var outputValue float64
     if inputUnit == "cm" {
-        outputValue := convertCM(inputValue, outputUnit)
-        fmt.Println(outputValue)
+        outputValue = convertCM(inputValue, outputUnit)
     }
-    
+    fmt.Println(outputValue)
 }
 
 type conversion struct {
