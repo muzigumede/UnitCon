@@ -11,11 +11,17 @@ import ("fmt"
 
 func main(){
     reader := bufio.NewReader(os.Stdin)
-    fmt.Println("Enter conversion: ")
+    fmt.Println("Enter conversion: e.g 35cm to mm")
     userInput,_ := reader.ReadString('\n')
 
     arrFormatedInput := separate(userInput)
     fmt.Println(arrFormatedInput)
+}
+
+type conversion struct {
+    value float64
+    fromUnit string
+    toUnit string
 }
 
 func separate(userInput string) [3]string{
@@ -36,14 +42,9 @@ func separate(userInput string) [3]string{
 //convert user input string into an fixed array with [1]=number, [2]=unit, [3]=to unit
 /*func makeStruct(formatedInput [3]string) conversion{
     //stuff to be done
-    type conversion struct {
-        value float64
-        fromUnit string
-        toUnit string
-    }
 
     conversion1 := conversion{
-        value: formatedInput[0],
+        value: strconv.ParseFloat(formatedInput[0],
         fromUnit: formatedInput[1],
         toUnit: formatedInput[2]}
 
@@ -63,3 +64,5 @@ func cmConvert(cm string, toUnit string) float64{
     }
     return newUnit
 }
+
+
