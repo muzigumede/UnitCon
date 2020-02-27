@@ -4,19 +4,18 @@ import ("fmt"
         "strconv"
         "strings"
         "regexp"
+        "bufio"
+        "os"
         //"reflect"
         )
 
 func main(){
-    var arr [3]string
-    arr[0] = "18"
-    arr[1] = "cm"
-    arr[2] = "mm"
-    fmt.Println(fmt.Sprint(cmConvert(arr[0],arr[2]))+"mm")
-    arrFormatedInput := separate("35cm to km")
-    conversionStruct = makeStruct(arrFormatedInput)
+    reader := bufio.NewReader(os.Stdin)
+    fmt.Println("Enter conversion: ")
+    userInput,_ := reader.ReadString('\n')
 
-    fmt.Println(conversionStruct.fromUnit)
+    arrFormatedInput := separate(userInput)
+    fmt.Println(arrFormatedInput)
 }
 
 func separate(userInput string) [3]string{
@@ -35,7 +34,7 @@ func separate(userInput string) [3]string{
 }
 
 //convert user input string into an fixed array with [1]=number, [2]=unit, [3]=to unit
-func makeStruct(formatedInput [3]string) conversion{
+/*func makeStruct(formatedInput [3]string) conversion{
     //stuff to be done
     type conversion struct {
         value float64
@@ -49,7 +48,7 @@ func makeStruct(formatedInput [3]string) conversion{
         toUnit: formatedInput[2]}
 
     return conversion1
-}
+}*/
 
 func cmConvert(cm string, toUnit string) float64{
     var newUnit float64 = 0.0
