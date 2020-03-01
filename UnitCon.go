@@ -9,7 +9,6 @@ import ("fmt"
         //"reflect"
         )
 
-//bug to fix: variable toUnit in func convertCM() contains multiline blank space
 
 func main(){
     reader := bufio.NewReader(os.Stdin)
@@ -21,8 +20,14 @@ func main(){
     var outputValue float64
     if inputUnit == "cm" {
         outputValue = convertCM(inputValue, outputUnit)
+    }else if inputUnit == "mm" {
+        outputValue = convertMM(inputValue, outputUnit)
+    }else if inputUnit == "c" {
+        outputValue = convertCelsius(inputValue, outputUnit)
     }
+
     fmt.Println(outputValue)
+    fmt.Println(outputUnit)
 }
 
 type conversion struct {
@@ -35,7 +40,7 @@ func separate(userInput string)(float64, string, string){
     var midIndex = strings.Index(userInput, "to")
     
     var inputUnit string = strings.Replace(userInput[0:midIndex]," ","",-1)
-    var outputUnit string = strings.Replace(userInput[midIndex+2:len(userInput)]," ","",-1)
+    var outputUnit string = strings.Replace(userInput[midIndex+2:len(userInput)-1]," ","",-1)
     re := regexp.MustCompile("[0-9]+")
     inputValueArray := re.FindAllString(inputUnit,-1)
     inputValue :=inputValueArray[0]
@@ -45,6 +50,19 @@ func separate(userInput string)(float64, string, string){
     floatInputValue, err := strconv.ParseFloat(inputValue, 64)
     if err != nil{
         panic(err)
+    }
+
+    //convert all units to uppercase for precise checking in "if" statement
+    inputUnit = strings.ToLower(inputUnit)
+    outputUnit = strings.ToLower(outputUnit)
+
+    //move separated input to supported units
+    if(strings.Contains(inputUnit, "cm") || strings.Contains(inputUnit, "centimet")){
+        inputUnit = "cm"    
+    }else if(strings.Contains(inputUnit, "mm") || strings.Contains(inputUnit, "millimet")){
+        inputUnit = "mm"
+    }else if(strings.Contains(inputUnit, "c") || strings.Contains(inputUnit, "celsius")){
+        inputUnit = "c"
     }
 
     return floatInputValue, inputUnit, outputUnit
@@ -72,4 +90,23 @@ func convertCM(cm float64, toUnit string) float64{
     return newUnit
 }
 
+func convertMM(mm float64, toUnit string) float64{
+    var newUnit float64 = 0.0
+
+    if strings.Contains(toUnit, "cm") {
+        cm := mm/10
+        newUnit = cm
+    }
+    return newUnit
+}
+
+func convertCelsius(c float64, toUnit string) float64{
+    var newUnit float64 
+
+    if strings.Contains(toUnit, "f") {
+        f := c*9/5 + 32
+        newUnit = f
+    }
+    return newUnit
+}
 
