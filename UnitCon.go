@@ -18,6 +18,7 @@ func main(){
     inputValue, inputUnit, outputUnit := separate(userInput)
 
     var outputValue float64
+
     if inputUnit == "cm" {
         outputValue = convertCM(inputValue, outputUnit)
     }else if inputUnit == "mm" {
@@ -25,8 +26,6 @@ func main(){
     }else if inputUnit == "c" {
         outputValue = convertCelsius(inputValue, outputUnit)
     }
-
-    
 
     fmt.Println(fmt.Sprint(outputValue) + strings.ToUpper(outputUnit))
 }
