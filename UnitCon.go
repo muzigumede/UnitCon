@@ -26,8 +26,9 @@ func main(){
         outputValue = convertCelsius(inputValue, outputUnit)
     }
 
-    fmt.Println(outputValue)
-    fmt.Println(outputUnit)
+    
+
+    fmt.Println(fmt.Sprint(outputValue) + strings.ToUpper(outputUnit))
 }
 
 type conversion struct {
