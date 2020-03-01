@@ -19,6 +19,7 @@ func main(){
 
     var outputValue float64
 
+    //check for to the corresponding function to call
     if inputUnit == "cm" {
         outputValue = convertCM(inputValue, outputUnit)
     }else if inputUnit == "mm" {
@@ -83,9 +84,15 @@ func separate(userInput string)(float64, string, string){
 func convertCM(cm float64, toUnit string) float64{
     var newUnit float64 = 0.0
 
-    if strings.Contains(toUnit, "mm") {
+    if toUnit == "mm" {
         mm := cm*10
         newUnit = mm
+    }else if toUnit == "m" {
+        m := cm/100
+        newUnit = m
+    }else if toUnit == "km" {
+        km := cm/100000
+        newUnit = km
     }
     return newUnit
 }
