@@ -15,17 +15,16 @@ func main(){
     fmt.Println("Enter conversion: e.g 35cm to mm")
     userInput,_ := reader.ReadString('\n')
 
-    inputValue, inputUnit, outputUnit := separate(userInput)
+    inputValue, inputUnit, outputUnit, unitType := separate(userInput)
 
     var outputValue float64
 
     //check for to the corresponding function to call
-    if inputUnit == "cm" {
-        outputValue = convertCM(inputValue, outputUnit)
-    }else if inputUnit == "mm" {
-        outputValue = convertMM(inputValue, outputUnit)
-    }else if inputUnit == "c" {
-        outputValue = convertCelsius(inputValue, outputUnit)
+    if unitType == "length" {
+        outputValue = length(inputValue,inputUnit, outputUnit)
+
+    }else if unitType == "temp" {
+        outputValue = temperature(inputValue,inputUnit, outputUnit)
     }
 
     fmt.Println(fmt.Sprint(outputValue) + strings.ToUpper(outputUnit))
@@ -37,7 +36,7 @@ type conversion struct {
     toUnit string
 }
 
-func separate(userInput string)(float64, string, string){
+func separate(userInput string)(float64, string, string, string){
     var midIndex = strings.Index(userInput, "to")
     
     var inputUnit string = strings.Replace(userInput[0:midIndex]," ","",-1)
@@ -57,63 +56,69 @@ func separate(userInput string)(float64, string, string){
     inputUnit = strings.ToLower(inputUnit)
     outputUnit = strings.ToLower(outputUnit)
 
+    var unitType string
     //move separated input to supported units
     if(strings.Contains(inputUnit, "cm") || strings.Contains(inputUnit, "centimet")){
-        inputUnit = "cm"    
+        inputUnit = "cm" 
+        unitType = "length"
     }else if(strings.Contains(inputUnit, "mm") || strings.Contains(inputUnit, "millimet")){
         inputUnit = "mm"
+        unitType = "length"
     }else if(strings.Contains(inputUnit, "c") || strings.Contains(inputUnit, "celsius")){
         inputUnit = "c"
+        unitType = "temp"
+    }else if(strings.Contains(inputUnit, "f") || strings.Contains(inputUnit, "fahrenheit")){
+        inputUnit = "f"
+        unitType = "temp"
+    }else if(strings.Contains(inputUnit, "k") || strings.Contains(inputUnit, "kelvin")){
+        inputUnit = "k"
+        unitType = "temp"
     }
 
-    return floatInputValue, inputUnit, outputUnit
+    return floatInputValue, inputUnit, outputUnit, unitType
 }
 
-//convert user input string into an fixed array with [1]=number, [2]=unit, [3]=to unit
-/*func makeStruct(formatedInput [3]string) conversion{
-    //stuff to be done
+func length(inputValue float64, fromUnit string, toUnit string) float64{
+    var newValue float64
+    var i string = toUnit
 
-    conversion1 := conversion{
-        value: strconv.ParseFloat(formatedInput[0],
-        fromUnit: formatedInput[1],
-        toUnit: formatedInput[2]}
-
-    return conversion1
-}*/
-
-func convertCM(cm float64, toUnit string) float64{
-    var newUnit float64 = 0.0
-
-    if toUnit == "mm" {
-        mm := cm*10
-        newUnit = mm
-    }else if toUnit == "m" {
-        m := cm/100
-        newUnit = m
-    }else if toUnit == "km" {
-        km := cm/100000
-        newUnit = km
+    if fromUnit == "cm" {
+        switch i {
+            case "mm"  : newValue = inputValue*10
+            case "inch": newValue = inputValue*0.393701
+            case "m"   : newValue = inputValue/100
+            case "km"  : newValue = inputValue/100000
+        }
+    }else if fromUnit == "mm" {
+        switch i {
+            case "cm"  : newValue = inputValue/10
+            case "inch": newValue = inputValue*0.0393701
+            case "m"   : newValue = inputValue/1000
+            case "km"  : newValue = inputValue/1000000
+        }
     }
-    return newUnit
+    return newValue
 }
 
-func convertMM(mm float64, toUnit string) float64{
-    var newUnit float64 = 0.0
+func temperature(inputValue float64, fromUnit string, toUnit string) float64{
+    var newValue float64
+    var i string = toUnit
 
-    if strings.Contains(toUnit, "cm") {
-        cm := mm/10
-        newUnit = cm
+    if fromUnit == "c" {
+        switch i {
+            case "f" : newValue = inputValue*9/5 + 32
+            case "k" : newValue = inputValue + 273.15
+        }
+    } else if fromUnit == "f" {
+        switch i {
+            case "c" : newValue = (inputValue - 32)*5/9
+            case "k" : newValue = (inputValue - 32)*5/9 +273.15
+        }
+    }else if fromUnit == "k" {
+        switch i {
+            case "c" : newValue = inputValue - 273.15
+        }
     }
-    return newUnit
-}
-
-func convertCelsius(c float64, toUnit string) float64{
-    var newUnit float64 
-
-    if strings.Contains(toUnit, "f") {
-        f := c*9/5 + 32
-        newUnit = f
-    }
-    return newUnit
+    return newValue
 }
 
