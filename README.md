@@ -7,7 +7,7 @@ supported conversions
 
 length
 1. cm to mm, inch, km
-2. mm to cm, inch, km
+2. mm >> cm, inch, km
 
 temperature
 1. celsius to fahrenheit, kelvin
