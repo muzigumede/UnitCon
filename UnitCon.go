@@ -6,7 +6,6 @@ import ("fmt"
         "regexp"
         "bufio"
         "os"
-        //"reflect"
         )
 
 
@@ -50,26 +49,24 @@ func separate(userInput string)(float64, string, string, string){
     inputUnit = strings.ToLower(inputUnit)
     outputUnit = strings.ToLower(outputUnit)
 
-    var unitType string
-    //move separated input to supported units
-    if(strings.Contains(inputUnit, "cm") || strings.Contains(inputUnit, "centimet")){
-        inputUnit = "cm" 
-        unitType = "length"
-    }else if(strings.Contains(inputUnit, "mm") || strings.Contains(inputUnit, "millimet")){
-        inputUnit = "mm"
-        unitType = "length"
-    }else if(strings.Contains(inputUnit, "c") || strings.Contains(inputUnit, "celsius")){
-        inputUnit = "c"
-        unitType = "temp"
-    }else if(strings.Contains(inputUnit, "f") || strings.Contains(inputUnit, "fahrenheit")){
-        inputUnit = "f"
-        unitType = "temp"
-    }else if(strings.Contains(inputUnit, "k") || strings.Contains(inputUnit, "kelvin")){
-        inputUnit = "k"
-        unitType = "temp"
-    }
+    unitsArr := [2]string{inputUnit,outputUnit}
 
-    return floatInputValue, inputUnit, outputUnit, unitType
+    var unitType string
+
+    //move separated input to supported units
+    for i := 0;i<len(unitsArr);i++{
+        switch unitsArr[i] {
+            case "millimetre" : unitsArr[i], unitType = "mm", "length"
+            case "centimetre" : unitsArr[i], unitType = "cm", "length"
+            case "kilometre"  : unitsArr[i], unitType = "km", "length"
+            case "inch"       : unitsArr[i], unitType = "inch", "length"
+            case "celsius"    : unitsArr[i], unitType = "c", "temp"
+            case "fahrenheit" : unitsArr[i], unitType = "f", "temp"
+            case "kelvin"     : unitsArr[i], unitType = "k", "temp"
+        }
+    }
+    
+    return floatInputValue, unitsArr[0], unitsArr[1], unitType
 }
 
 //handle type length conversions
@@ -113,6 +110,8 @@ func temperature(inputValue float64, fromUnit string, toUnit string) float64{
             case "c" : newValue = inputValue - 273.15
         }
     }
+    fmt.Println(fromUnit)
+    fmt.Println(toUnit)
     return newValue
 }
 
