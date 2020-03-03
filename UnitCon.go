@@ -30,12 +30,6 @@ func main(){
     fmt.Println(fmt.Sprint(outputValue) + strings.ToUpper(outputUnit))
 }
 
-type conversion struct {
-    value float64
-    fromUnit string
-    toUnit string
-}
-
 func separate(userInput string)(float64, string, string, string){
     var midIndex = strings.Index(userInput, "to")
     
@@ -78,19 +72,19 @@ func separate(userInput string)(float64, string, string, string){
     return floatInputValue, inputUnit, outputUnit, unitType
 }
 
+//handle type length conversions
 func length(inputValue float64, fromUnit string, toUnit string) float64{
     var newValue float64
-    var i string = toUnit
 
     if fromUnit == "cm" {
-        switch i {
+        switch toUnit {
             case "mm"  : newValue = inputValue*10
             case "inch": newValue = inputValue*0.393701
             case "m"   : newValue = inputValue/100
             case "km"  : newValue = inputValue/100000
         }
     }else if fromUnit == "mm" {
-        switch i {
+        switch toUnit {
             case "cm"  : newValue = inputValue/10
             case "inch": newValue = inputValue*0.0393701
             case "m"   : newValue = inputValue/1000
@@ -100,22 +94,22 @@ func length(inputValue float64, fromUnit string, toUnit string) float64{
     return newValue
 }
 
+//handle type temperature conversions
 func temperature(inputValue float64, fromUnit string, toUnit string) float64{
     var newValue float64
-    var i string = toUnit
 
     if fromUnit == "c" {
-        switch i {
+        switch toUnit {
             case "f" : newValue = inputValue*9/5 + 32
             case "k" : newValue = inputValue + 273.15
         }
     } else if fromUnit == "f" {
-        switch i {
+        switch toUnit {
             case "c" : newValue = (inputValue - 32)*5/9
             case "k" : newValue = (inputValue - 32)*5/9 +273.15
         }
     }else if fromUnit == "k" {
-        switch i {
+        switch toUnit {
             case "c" : newValue = inputValue - 273.15
         }
     }
