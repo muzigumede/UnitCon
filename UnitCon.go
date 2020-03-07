@@ -56,13 +56,13 @@ func separate(userInput string)(float64, string, string, string){
     //move separated input to supported units
     for i := 0;i<len(unitsArr);i++{
         switch unitsArr[i] {
-            case "millimetre" : unitsArr[i], unitType = "mm", "length"
-            case "centimetre" : unitsArr[i], unitType = "cm", "length"
-            case "kilometre"  : unitsArr[i], unitType = "km", "length"
-            case "inch"       : unitsArr[i], unitType = "inch", "length"
-            case "celsius"    : unitsArr[i], unitType = "c", "temp"
-            case "fahrenheit" : unitsArr[i], unitType = "f", "temp"
-            case "kelvin"     : unitsArr[i], unitType = "k", "temp"
+            case "mm","millimetre" : unitsArr[i], unitType = "mm", "length"
+            case "cm","centimetre" : unitsArr[i], unitType = "cm", "length"
+            case "km","kilometre"  : unitsArr[i], unitType = "km", "length"
+            case "inch"            : unitsArr[i], unitType = "inch", "length"
+            case "c","celsius"     : unitsArr[i], unitType = "c", "temp"
+            case "f","fahrenheit"  : unitsArr[i], unitType = "f", "temp"
+            case "k","kelvin"      : unitsArr[i], unitType = "k", "temp"
         }
     }
     
@@ -110,8 +110,7 @@ func temperature(inputValue float64, fromUnit string, toUnit string) float64{
             case "c" : newValue = inputValue - 273.15
         }
     }
-    fmt.Println(fromUnit)
-    fmt.Println(toUnit)
+
     return newValue
 }
 
