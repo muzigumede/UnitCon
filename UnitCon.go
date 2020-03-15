@@ -16,14 +16,14 @@ func main(){
 
     inputValue, inputUnit, outputUnit, unitType := separate(userInput)
 
-    var outputValue float64
+    //var outputValue float64
 
     //check for to the corresponding function to call
     if unitType == "length" {
         convertLength(&inputValue,inputUnit, outputUnit)
 
     }else if unitType == "temp" {
-        outputValue = temperature(inputValue,inputUnit, outputUnit)
+        //outputValue = temperature(inputValue,inputUnit, outputUnit)
     }
 
     fmt.Println(fmt.Sprint(inputValue) + strings.ToUpper(outputUnit))
