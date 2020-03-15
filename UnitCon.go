@@ -16,8 +16,6 @@ func main(){
 
     value, inputUnit, outputUnit, unitType := separate(userInput)
 
-    //var outputValue float64
-
     //check for to the corresponding function to call
     if unitType == "length" {
         convertLength(&value,inputUnit, outputUnit)
