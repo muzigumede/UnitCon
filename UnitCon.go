@@ -80,8 +80,6 @@ func separate(conv *conversion, userInput string){
     conv.value      = floatInputValue
     conv.inputUnit  = inputUnit
     conv.outputUnit = outputUnit
-
-    
 }
 
 //handle type length conversions
