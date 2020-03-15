@@ -79,6 +79,7 @@ func convertLength(value *float64, fromUnit string, toUnit string) {
             case "m"   : *value = *value/100
             case "km"  : *value = *value/100000
         }
+
     } else if fromUnit == "mm" {
         switch toUnit {
             case "cm"  : *value = *value/10
