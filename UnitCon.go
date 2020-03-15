@@ -22,7 +22,7 @@ func main(){
     //ask user for input
     fmt.Println("Enter conversion: e.g 35cm to mm")
 
-    //get input from the user
+    //store input from the user
     reader       := bufio.NewReader(os.Stdin)
     userInput, _ := reader.ReadString('\n')
 
