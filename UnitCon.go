@@ -22,7 +22,7 @@ func main(){
     if unitType == "length" {
         convertLength(&value,inputUnit, outputUnit)
 
-    }else if unitType == "temp" {
+    } else if unitType == "temp" {
         convertTemperature(&value,inputUnit, outputUnit)
     }
 
@@ -79,7 +79,7 @@ func convertLength(value *float64, fromUnit string, toUnit string) {
             case "m"   : *value = *value/100
             case "km"  : *value = *value/100000
         }
-    }else if fromUnit == "mm" {
+    } else if fromUnit == "mm" {
         switch toUnit {
             case "cm"  : *value = *value/10
             case "inch": *value = *value*0.0393701
@@ -104,7 +104,7 @@ func convertTemperature(value *float64, fromUnit string, toUnit string) {
             case "k" : *value = (*value - 32)*5/9 +273.15
         }
 
-    }else if fromUnit == "k" {
+    } else if fromUnit == "k" {
         switch toUnit {
             case "c" : *value = *value - 273.15
         }
