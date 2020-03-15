@@ -20,13 +20,13 @@ func main(){
 
     //check for to the corresponding function to call
     if unitType == "length" {
-        outputValue = length(inputValue,inputUnit, outputUnit)
+        length(&inputValue,inputUnit, outputUnit)
 
     }else if unitType == "temp" {
         outputValue = temperature(inputValue,inputUnit, outputUnit)
     }
 
-    fmt.Println(fmt.Sprint(outputValue) + strings.ToUpper(outputUnit))
+    fmt.Println(fmt.Sprint(inputValue) + strings.ToUpper(outputUnit))
 }
 
 func separate(userInput string)(float64, string, string, string){
@@ -70,7 +70,7 @@ func separate(userInput string)(float64, string, string, string){
 }
 
 //handle type length conversions
-func length(inputValue float64, fromUnit string, toUnit string) float64{
+func convertLength(value *float64, fromUnit string, toUnit string) {
     var newValue float64
 
     if fromUnit == "cm" {
@@ -88,7 +88,6 @@ func length(inputValue float64, fromUnit string, toUnit string) float64{
             case "km"  : newValue = inputValue/1000000
         }
     }
-    return newValue
 }
 
 //handle type temperature conversions
