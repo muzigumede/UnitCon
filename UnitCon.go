@@ -14,19 +14,19 @@ func main(){
     fmt.Println("Enter conversion: e.g 35cm to mm")
     userInput,_ := reader.ReadString('\n')
 
-    inputValue, inputUnit, outputUnit, unitType := separate(userInput)
+    value, inputUnit, outputUnit, unitType := separate(userInput)
 
     //var outputValue float64
 
     //check for to the corresponding function to call
     if unitType == "length" {
-        convertLength(&inputValue,inputUnit, outputUnit)
+        convertLength(&value,inputUnit, outputUnit)
 
     }else if unitType == "temp" {
         //outputValue = temperature(inputValue,inputUnit, outputUnit)
     }
 
-    fmt.Println(fmt.Sprint(inputValue) + strings.ToUpper(outputUnit))
+    fmt.Println(fmt.Sprint(value) + strings.ToUpper(outputUnit))
 }
 
 func separate(userInput string)(float64, string, string, string){
