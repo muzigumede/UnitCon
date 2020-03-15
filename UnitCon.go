@@ -90,7 +90,7 @@ func convertLength(value *float64, fromUnit string, toUnit string) {
 }
 
 //handle type temperature conversions
-func convertTemperature(value *float64, fromUnit string, toUnit string) float64{
+func convertTemperature(value *float64, fromUnit string, toUnit string) {
 
     if fromUnit == "c" {
         switch toUnit {
