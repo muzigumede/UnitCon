@@ -97,11 +97,13 @@ func convertTemperature(value *float64, fromUnit string, toUnit string) {
             case "f" : *value = *value*9/5 + 32
             case "k" : *value = *value + 273.15
         }
+
     } else if fromUnit == "f" {
         switch toUnit {
             case "c" : *value = (*value - 32)*5/9
             case "k" : *value = (*value - 32)*5/9 +273.15
         }
+
     }else if fromUnit == "k" {
         switch toUnit {
             case "c" : *value = *value - 273.15
