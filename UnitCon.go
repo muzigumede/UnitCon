@@ -10,6 +10,8 @@ import ("fmt"
 
 
 func main(){
+
+    //get input from the user
     reader := bufio.NewReader(os.Stdin)
     fmt.Println("Enter conversion: e.g 35cm to mm")
     userInput,_ := reader.ReadString('\n')
