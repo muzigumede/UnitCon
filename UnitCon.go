@@ -9,27 +9,39 @@ import ("fmt"
         )
 
 
-func main(){
-
-    //get input from the user
-    reader := bufio.NewReader(os.Stdin)
-    fmt.Println("Enter conversion: e.g 35cm to mm")
-    userInput,_ := reader.ReadString('\n')
-
-    value, inputUnit, outputUnit, unitType := separate(userInput)
-
-    //check for to the corresponding function to call
-    if unitType == "length" {
-        convertLength(&value,inputUnit, outputUnit)
-
-    } else if unitType == "temp" {
-        convertTemperature(&value,inputUnit, outputUnit)
-    }
-
-    fmt.Println(fmt.Sprint(value) + strings.ToUpper(outputUnit))
+type conversion struct {
+    value       float64
+    inputUnit   string
+    outputUnit  string
+    unitType    string
 }
 
-func separate(userInput string)(float64, string, string, string){
+
+func main(){
+
+    //ask user for input
+    fmt.Println("Enter conversion: e.g 35cm to mm")
+
+    //get input from the user
+    reader       := bufio.NewReader(os.Stdin)
+    userInput, _ := reader.ReadString('\n')
+
+    convObj      := conversion{}
+
+    separate(&convObj, userInput)
+
+    //check for to the corresponding function to call
+    if convObj.unitType == "length" {
+        convertLength(&convObj.value, convObj.inputUnit, convObj.outputUnit)
+
+    } else if convObj.unitType == "temp" {
+        convertTemperature(&convObj.value, convObj.inputUnit, convObj.outputUnit)
+    }
+
+    fmt.Println(fmt.Sprint(convObj.value) + strings.ToUpper(convObj.outputUnit))
+}
+
+func separate(conv *conversion, userInput string){
     var midIndex = strings.Index(userInput, "to")
     
     var inputUnit string = strings.Replace(userInput[0:midIndex]," ","",-1)
@@ -49,24 +61,27 @@ func separate(userInput string)(float64, string, string, string){
     inputUnit = strings.ToLower(inputUnit)
     outputUnit = strings.ToLower(outputUnit)
 
-    unitsArr := [2]string{inputUnit,outputUnit}
+    unitsArr := []string{inputUnit, outputUnit}
 
-    var unitType string
-
+    
     //move separated input to supported units
     for i := 0;i<len(unitsArr);i++{
         switch unitsArr[i] {
-            case "mm","millimetre" : unitsArr[i], unitType = "mm", "length"
-            case "cm","centimetre" : unitsArr[i], unitType = "cm", "length"
-            case "km","kilometre"  : unitsArr[i], unitType = "km", "length"
-            case "inch"            : unitsArr[i], unitType = "inch", "length"
-            case "c","celsius"     : unitsArr[i], unitType = "c", "temp"
-            case "f","fahrenheit"  : unitsArr[i], unitType = "f", "temp"
-            case "k","kelvin"      : unitsArr[i], unitType = "k", "temp"
+            case "mm","millimetre" : unitsArr[i], conv.unitType = "mm", "length"
+            case "cm","centimetre" : unitsArr[i], conv.unitType = "cm", "length"
+            case "km","kilometre"  : unitsArr[i], conv.unitType = "km", "length"
+            case "inch"            : unitsArr[i], conv.unitType = "inch", "length"
+            case "c","celsius"     : unitsArr[i], conv.unitType = "c", "temp"
+            case "f","fahrenheit"  : unitsArr[i], conv.unitType = "f", "temp"
+            case "k","kelvin"      : unitsArr[i], conv.unitType = "k", "temp"
         }
     }
     
-    return floatInputValue, unitsArr[0], unitsArr[1], unitType
+    conv.value      = floatInputValue
+    conv.inputUnit  = inputUnit
+    conv.outputUnit = outputUnit
+
+    
 }
 
 //handle type length conversions
