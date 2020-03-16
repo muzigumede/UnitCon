@@ -64,7 +64,7 @@ func separate(conv *conversion, userInput string){
     unitsArr := []string{inputUnit, outputUnit}
 
     
-    //move separated input to supported units
+    //move separated input to supported measure units
     for i := 0;i<len(unitsArr);i++{
         switch unitsArr[i] {
             case "mm","millimetre" : unitsArr[i], conv.unitType = "mm", "length"
