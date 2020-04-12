@@ -16,6 +16,11 @@ type conversion struct {
     unitType    string
 }
 
+/*still to implement:
+        -Base converter
+        -Mass converter
+        -Volume converter
+*/
 
 func main(){
 
@@ -124,4 +129,5 @@ func convertTemperature(value *float64, fromUnit string, toUnit string) {
         }
     }
 }
+
 
