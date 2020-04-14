@@ -20,6 +20,7 @@ type conversion struct {
         -Base converter
         -Mass converter
         -Volume converter
+        -velocity converter
 */
 
 func main(){
