@@ -28,7 +28,7 @@ func main(){
     //ask user for input
     fmt.Println("Enter conversion: e.g 35cm to mm")
 
-    //store input from the user
+    //accept input from the user
     reader       := bufio.NewReader(os.Stdin)
     userInput, _ := reader.ReadString('\n')
 
@@ -37,58 +37,62 @@ func main(){
     separate(&convObj, userInput)
 
     //check for to the corresponding function to call
-    if convObj.unitType == "length" {
-        convertLength(&convObj.value, convObj.inputUnit, convObj.outputUnit)
-
-    } else if convObj.unitType == "temp" {
-        convertTemperature(&convObj.value, convObj.inputUnit, convObj.outputUnit)
+    switch(convObj.unitType){
+        case "length": convertLength(&convObj.value, convObj.inputUnit, convObj.outputUnit)
+        case "temp"  : convertTemperature(&convObj.value, convObj.inputUnit, convObj.outputUnit)
+        case "base"  : convertBase(&convObj.value, convObj.inputUnit, convObj.outputUnit)
     }
 
     fmt.Println(fmt.Sprint(convObj.value) + strings.ToUpper(convObj.outputUnit))
 }
 
 func separate(conv *conversion, userInput string){
-    var midIndex = strings.Index(userInput, "to")
-    
-    var inputUnit string = strings.Replace(userInput[0:midIndex]," ","",-1)
-    var outputUnit string = strings.Replace(userInput[midIndex+2:len(userInput)-1]," ","",-1)
-    re := regexp.MustCompile("[0-9]+")
-    inputValueArray := re.FindAllString(inputUnit,-1)
-    inputValue :=inputValueArray[0]
-    
-    inputUnit = strings.Replace(inputUnit,inputValue,"",-1)
-    
-    floatInputValue, err := strconv.ParseFloat(inputValue, 64)
-    if err != nil{
-        panic(err)
-    }
+var midIndex = strings.Index(userInput, "to")
 
-    //convert all units to uppercase for precise checking in "if" statement
-    inputUnit = strings.ToLower(inputUnit)
-    outputUnit = strings.ToLower(outputUnit)
+var inputUnit string = strings.Replace(userInput[0:midIndex]," ","",-1)
+        var outputUnit string = strings.Replace(userInput[midIndex+2:len(userInput)-1]," ","",-1)
+        re := regexp.MustCompile("[0-9]+")
+        inputValueArray := re.FindAllString(inputUnit,-1)
+        inputValue :=inputValueArray[0]
 
-    unitsArr := []string{inputUnit, outputUnit}
+        inputUnit = strings.Replace(inputUnit,inputValue,"",-1)
 
-    
-    //move separated input to supported measure units
-    for i := 0;i<len(unitsArr);i++{
-        switch unitsArr[i] {
-            case "mm","millimetre" : unitsArr[i], conv.unitType = "mm", "length"
-            case "cm","centimetre" : unitsArr[i], conv.unitType = "cm", "length"
-            case "km","kilometre"  : unitsArr[i], conv.unitType = "km", "length"
-            case "inch"            : unitsArr[i], conv.unitType = "inch", "length"
-            case "c","celsius"     : unitsArr[i], conv.unitType = "c", "temp"
-            case "f","fahrenheit"  : unitsArr[i], conv.unitType = "f", "temp"
-            case "k","kelvin"      : unitsArr[i], conv.unitType = "k", "temp"
+        floatInputValue, err := strconv.ParseFloat(inputValue, 64)
+        if err != nil{
+                panic(err)
         }
-    }
-    
-    conv.value      = floatInputValue
-    conv.inputUnit  = inputUnit
-    conv.outputUnit = outputUnit
+
+        //convert all units to uppercase for precise checking in "if" statement
+        inputUnit = strings.ToLower(inputUnit)
+        outputUnit = strings.ToLower(outputUnit)
+
+        unitsArr := []string{inputUnit, outputUnit}
+
+
+        //move separated input to supported measure units
+        for i := 0;i<len(unitsArr);i++{
+                switch unitsArr[i] { 
+                        //distance and length 
+                        case "mm","millimetre" : unitsArr[i], conv.unitType = "mm", "length"
+                        case "cm","centimetre" : unitsArr[i], conv.unitType = "cm", "length"
+                        case "km","kilometre"  : unitsArr[i], conv.unitType = "km", "length"
+                        case "inch"            : unitsArr[i], conv.unitType = "inch", "length"
+                        //temperature
+                        case "c","celsius"     : unitsArr[i], conv.unitType = "c", "temp"
+                        case "f","fahrenheit"  : unitsArr[i], conv.unitType = "f", "temp"
+                        case "k","kelvin"      : unitsArr[i], conv.unitType = "k", "temp"
+                        //base
+                        case "10","base10"     : unitsArr[i], conv.unitType = "10", "base"
+                        case "8" ,"base8"      : unitsArr[i], conv.unitType = "8" , "base"
+                }
+        }
+
+        conv.value      = floatInputValue
+        conv.inputUnit  = inputUnit
+        conv.outputUnit = outputUnit
 }
 
-//handle type length conversions
+        //handle type length conversions
 func convertLength(value *float64, fromUnit string, toUnit string) {
 
     if fromUnit == "cm" {
@@ -129,6 +133,22 @@ func convertTemperature(value *float64, fromUnit string, toUnit string) {
             case "c" : *value = *value - 273.15
         }
     }
-}
+} 
 
-
+//handle type base conversions
+func convertBase(value *float64, fromUnit string, toUnit string) {
+        if fromUnit == "10" {
+                switch (toUnit) {
+                case "8" : 
+                        quotient := int(*value)
+                        rem      := ""
+                        for{
+                                rem = strconv.Itoa(quotient % 8) + rem
+                                quotient = quotient / 8
+                                if (quotient == 0){
+                                        break
+                                }
+                        }
+                }
+        }
+}      
